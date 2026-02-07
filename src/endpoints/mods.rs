@@ -47,7 +47,8 @@ pub async fn create(data: web::Data<AppData>, payload: web::Json<CreateQueryPara
     let json = ModJson::from_zip(&file_path).or(Err(ApiError::FilesystemError))?;
     pool.begin();
     Mod::from_json(&json, true, &mut pool).await?;
-
+    _ = tokio::fs::remove_file(file_path);
+    
     // // todo: authenticate
     // let mut file = std::fs::File::open(format!("db/temp_{id}.noahh")).or(Err(Error::FsError))?;
     // //                                                   ^ todo: sanitize

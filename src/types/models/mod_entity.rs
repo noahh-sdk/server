@@ -102,13 +102,13 @@ impl Mod {
 
 pub async fn download_noahh_file(url: &str) -> Result<String, ApiError> {
     let res = reqwest::get(url).await.or(Err(ApiError::BadRequest(String::from("Invalid URL"))))?;
-    if !std::fs::metadata("/tmp/noahh-index").is_ok() {
-        std::fs::create_dir("/tmp/noahh-index").or(Err(ApiError::FilesystemError))?;
+    if !tokio::fs::metadata("/tmp/noahh-index").await.is_ok() {
+        tokio::fs::create_dir("/tmp/noahh-index").await.or(Err(ApiError::FilesystemError))?;
     }
     let file_path = format!("/tmp/noahh-index/{}.noahh", Uuid::new_v4());
 
-    let mut file = std::fs::File::create(&file_path).or(Err(ApiError::FilesystemError))?;
+    let mut file = tokio::fs::File::create(&file_path).await.or(Err(ApiError::FilesystemError))?;
     let mut content = Cursor::new(res.bytes().await.or(Err(ApiError::FilesystemError))?);
-    std::io::copy(&mut content, &mut file).or(Err(ApiError::FilesystemError))?;
+    tokio::io::copy(&mut content, &mut file).await.or(Err(ApiError::FilesystemError))?;
     Ok(file_path)
 }
