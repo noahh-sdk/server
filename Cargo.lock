@@ -1949,6 +1949,7 @@ dependencies = [
  "futures",
  "log",
  "reqwest",
+ "semver",
  "serde",
  "serde_json",
  "sha256",
