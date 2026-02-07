@@ -16,11 +16,19 @@ pub struct ModVersion {
     pub version: String,
     pub download_link: String,
     pub hash: String,
-    pub geode_version: String,
+    pub noahh_version: String,
     pub windows: bool,
     pub android32: bool,
     pub android64: bool,
     pub mac: bool,
     pub ios: bool,
     pub mod_id: String
+}
+
+#[derive(sqlx::Type)]
+#[sqlx(type_name = "mood", rename_all = "lowercase")]
+pub enum ModImportance {
+    Required,
+    Recommended,
+    Suggested
 }
