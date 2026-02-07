@@ -1,2 +1,3 @@
 /target
-/db/noahh-index.db
+*.db
+.env
