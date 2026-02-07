@@ -26,12 +26,12 @@ pub async fn get(id: String, data: web::Data<AppData>) -> Result<impl Responder,
 }
 
 #[post("/v1/mods/{id}")]
-pub async fn create(id: String, data: web::Data<AppData>, mut noahh_file: web::Payload) -> Result<impl Responder, Error> {
+pub async fn create(id: String, data: web::Data<AppData>, mut geode_file: web::Payload) -> Result<impl Responder, Error> {
     // todo: authenticate
-    let mut file = std::fs::File::open(format!("db/temp_{id}.noahh")).or(Err(Error::FsError))?;
+    let mut file = std::fs::File::open(format!("db/temp_{id}.geode")).or(Err(Error::FsError))?;
     //                                                   ^ todo: sanitize
     let mut written = 0usize;
-    while let Some(chunk) = noahh_file.next().await {
+    while let Some(chunk) = geode_file.next().await {
         let chunk = chunk.map_err(|e| Error::UploadError(e.to_string()))?;
         written += chunk.len();
         if written > 262_144 {
@@ -40,7 +40,7 @@ pub async fn create(id: String, data: web::Data<AppData>, mut noahh_file: web::P
         file.write_all(&chunk).or(Err(Error::FsError))?;
     }
 
-    // todo: load info from noahh file and add to database
+    // todo: load info from geode file and add to database
 
     Ok(web::Json(None::<()>))
 }
