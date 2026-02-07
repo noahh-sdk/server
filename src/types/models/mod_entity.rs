@@ -119,8 +119,8 @@ impl Mod {
             return Err(ApiError::BadRequest(format!("Invalid mod version semver {}", json.version)));
         };
 
-        if semver::Version::parse(json.geode.trim_start_matches("v")).is_err() {
-            return Err(ApiError::BadRequest(format!("Invalid geode version  semver {}", json.geode)));
+        if semver::Version::parse(json.noahh.trim_start_matches("v")).is_err() {
+            return Err(ApiError::BadRequest(format!("Invalid noahh version semver {}", json.noahh)));
         };
 
         if new_mod {
@@ -140,7 +140,7 @@ impl Mod {
             None => return Err(ApiError::NotFound(format!("Mod {} doesn't exist", &json.id)))
         };
         if !result.validated {
-            return Err(ApiError::BadRequest("Cannot update an unverified mod. Please contact the Geode team for more details.".into()));
+            return Err(ApiError::BadRequest("Cannot update an unverified mod. Please contact the Noahh team for more details.".into()));
         }
         let version = semver::Version::parse(result.latest_version.trim_start_matches("v")).unwrap();
         let new_version = match semver::Version::parse(json.version.trim_start_matches("v")) {
