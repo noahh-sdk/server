@@ -153,7 +153,7 @@ components:
         - Noahh.devtools
         - mat.circle-tool
     
-    ModVersion:
+    ModVersionString:
       type: string
       pattern: '^v?\d+\.\d+\.\d+(?:-.+)?$'
       examples: 
