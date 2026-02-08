@@ -4,7 +4,8 @@ WIP version of the new Noahh Index, hosted on its own server rather than a Githu
 
 ## Checklist
 
-- [ ] Mod adding and updating
+- [x] Mod adding and updating
+- [x] Dependencies
 - [ ] Support for multiple developers per mod
 - [ ] Finish the openapi spec
 - [ ] Finish the database structure
