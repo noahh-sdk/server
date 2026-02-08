@@ -24,7 +24,13 @@ paths:
           description: Search query
           schema:
             type: string
-        - $ref: '#/components/parameters/NoahhVersionQuery'
+        - name: gd
+          in: query
+          description: Geometry Dash version
+          required: true
+          schema:
+            type: string
+        - $ref: '#/components/parameters/noahhVersionQuery'
         - $ref: '#/components/parameters/Page'
         - $ref: '#/components/parameters/PerPage'
 
