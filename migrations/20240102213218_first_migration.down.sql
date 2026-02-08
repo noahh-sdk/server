@@ -1,90 +1,19 @@
--- Add up migration script here
-CREATE TYPE mod_importance AS ENUM ('required', 'recommended', 'suggested');
-CREATE TYPE gd_version as ENUM ('*', '2.113', '2.200', '2.203');
-CREATE TYPE gd_ver_platform as ENUM ('android', 'ios', 'mac', 'win');
+-- Add down migration script here
 
-CREATE TABLE mods (
-    id TEXT PRIMARY KEY NOT NULL,
-    repository TEXT,
-    latest_version TEXT NOT NULL,
-    validated BOOLEAN NOT NULL
-);
+DROP TABLE IF EXISTS mods_mod_tags;
+DROP TABLE IF EXISTS mod_gd_versions;
+DROP TABLE IF EXISTS dependencies;
+DROP TABLE IF EXISTS incompatibilities;
+DROP TABLE IF EXISTS mod_tags;
+DROP TABLE IF EXISTS mod_versions;
+DROP TABLE IF EXISTS mods_developers;
+DROP TABLE IF EXISTS dependencies;
+DROP TABLE IF EXISTS mods;
+DROP TABLE IF EXISTS developers;
 
-CREATE TABLE mod_versions (
-    id SERIAL PRIMARY KEY NOT NULL,
-    name TEXT NOT NULL,
-    description TEXT,
-    version TEXT NOT NULL,
-    download_link TEXT NOT NULL,
-    hash TEXT NOT NULL,
-    geode_version TEXT NOT NULL,
-    windows BOOLEAN NOT NULL,
-    android32 BOOLEAN NOT NULL,
-    android64 BOOLEAN NOT NULL,
-    mac BOOLEAN NOT NULL,
-    ios BOOLEAN NOT NULL,
-    early_load BOOLEAN NOT NULL DEFAULT false,
-    api BOOLEAN NOT NULL DEFAULT false,
-    mod_id TEXT NOT NULL,
-    FOREIGN KEY (mod_id) REFERENCES mods(id)
-);
+DROP INDEX IF EXISTS idx_version_id;
 
-CREATE UNIQUE INDEX idx_version_id
-ON mod_versions(version, mod_id);
-
-CREATE TABLE mod_tags (
-    id SERIAL PRIMARY KEY NOT NULL,
-    name TEXT NOT NULL
-);
-
-CREATE TABLE mods_mod_tags (
-    mod_id INTEGER NOT NULL,
-    tag_id INTEGER NOT NULL,
-    PRIMARY KEY (mod_id, tag_id),
-    FOREIGN KEY (mod_id) REFERENCES mod_versions(id),
-    FOREIGN KEY (tag_id) REFERENCES mod_tags(id)
-);
-
-CREATE TABLE mod_gd_versions (
-    id SERIAL PRIMARY KEY NOT NULL,
-    mod_id INTEGER NOT NULL,
-    gd gd_version NOT NULL,
-    platform gd_ver_platform NOT NULL,
-    FOREIGN KEY (mod_id) REFERENCES mod_versions(id)
-);
-
-CREATE TABLE dependencies (
-    dependent_id INTEGER NOT NULL,
-    dependency_id INTEGER NOT NULL,
-    compare TEXT NOT NULL,
-    importance mod_importance NOT NULL,
-    PRIMARY KEY (dependent_id, dependency_id),
-    FOREIGN KEY (dependent_id) REFERENCES mod_versions(id),
-    FOREIGN KEY (dependency_id) REFERENCES mod_versions(id)
-);
-
-CREATE TABLE incompatibilities (
-    mod_id INTEGER NOT NULL,
-    incompatibility_id INTEGER NOT NULL,
-    compare TEXT NOT NULL,
-    importance mod_importance NOT NULL,
-    PRIMARY KEY (mod_id, incompatibility_id),
-    FOREIGN KEY (mod_id) REFERENCES mod_versions(id),
-    FOREIGN KEY (incompatibility_id) REFERENCES mod_versions(id)
-);
-
-CREATE TABLE developers (
-    id SERIAL PRIMARY KEY NOT NULL,
-    username TEXT NOT NULL,
-    display_name TEXT NOT NULL,
-    verified BOOLEAN NOT NULL,
-    github_user_id BIGINT NOT NULL
-);
-
-CREATE TABLE mods_developers (
-    mod_id TEXT NOT NULL,
-    developer_id INTEGER NOT NULL,
-    PRIMARY KEY (mod_id, developer_id),
-    FOREIGN KEY (mod_id) REFERENCES mods(id),
-    FOREIGN KEY (developer_id) REFERENCES developers(id)
-);
+DROP TYPE IF EXISTS dependency_importance;
+DROP TYPE IF EXISTS version_compare;
+DROP TYPE IF EXISTS gd_version;
+DROP TYPE IF EXISTS gd_ver_platform;
