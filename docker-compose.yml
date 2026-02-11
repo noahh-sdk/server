@@ -1,0 +1,45 @@
+version: "3.8"
+name: "noahh-index"
+services:
+  app:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: noahh-index
+    restart: unless-stopped
+    environment:
+      - DATABASE_URL=postgres://noahh:noahh@noahh-postgres/noahh
+    develop:
+      watch:
+        - action: rebuild
+          path: ./src
+          target: /app
+          ignore:
+            - "target"
+    depends_on:
+      - postgres
+    env_file:
+      - ./.env
+    networks:
+      - dev
+    expose:
+      - 3000
+  postgres:
+    container_name: noahh-postgres
+    image: postgres:14.10-alpine3.19
+    restart: unless-stopped
+    environment:
+      - POSTGRES_PASSWORD=noahh
+      - POSTGRES_USER=noahh
+      - POSTGRES_DB=noahh
+    volumes:
+      - postgres-db:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - dev
+volumes:
+  postgres-db:
+networks:
+  dev:
+    driver: bridge
